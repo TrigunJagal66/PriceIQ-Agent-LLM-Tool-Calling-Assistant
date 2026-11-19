@@ -1,0 +1,60 @@
+[
+  {
+    "id": "price_basic",
+    "question": "What price should I set for 2026-05-15 if I have 200 rooms and my normal price is 150?",
+    "expected_tools": ["get_price_recommendation"],
+    "expected_args": {"get_price_recommendation": {"target_date": "2026-05-15", "base_price": 150, "capacity": 200}},
+    "grounded_fields": [["get_price_recommendation", "recommended_price"]]
+  },
+  {
+    "id": "compare_prices",
+    "question": "For 2026-06-12 with 180 rooms, which base price gives the most revenue: 120, 150 or 180?",
+    "expected_tools": ["compare_price_scenarios"],
+    "expected_args": {"compare_price_scenarios": {"target_date": "2026-06-12", "capacity": 180}},
+    "grounded_fields": [["compare_price_scenarios", "best_base_price"]]
+  },
+  {
+    "id": "history_range",
+    "question": "How many bookings did we get between 2025-07-01 and 2025-07-31, and which day was the busiest?",
+    "expected_tools": ["get_historical_demand"],
+    "expected_args": {"get_historical_demand": {"start_date": "2025-07-01", "end_date": "2025-07-31"}},
+    "grounded_fields": [["get_historical_demand", "total_bookings"], ["get_historical_demand", "peak_day"]]
+  },
+  {
+    "id": "dow_stats",
+    "question": "Which day of the week is usually busiest for us?",
+    "expected_tools": ["get_demand_stats"],
+    "expected_args": {"get_demand_stats": {"group_by": "day_of_week"}},
+    "grounded_fields": []
+  },
+  {
+    "id": "holiday_effect",
+    "question": "Is demand higher on holidays than on normal days?",
+    "expected_tools": ["get_demand_stats"],
+    "expected_args": {"get_demand_stats": {"group_by": "holiday"}},
+    "grounded_fields": []
+  },
+  {
+    "id": "multi_step",
+    "question": "Recommend a price for Friday 2026-06-12 (150 rooms, base price 140) and tell me how that Friday compares with our typical weekday demand.",
+    "expected_tools": ["get_price_recommendation", "get_demand_stats"],
+    "expected_args": {"get_price_recommendation": {"target_date": "2026-06-12", "base_price": 140, "capacity": 150}},
+    "grounded_fields": [["get_price_recommendation", "recommended_price"]]
+  },
+  {
+    "id": "out_of_horizon",
+    "question": "What price should I set for 2027-01-10 with 200 rooms and base price 150?",
+    "expected_tools": ["get_price_recommendation"],
+    "expected_args": {},
+    "grounded_fields": [],
+    "answer_contains": ["2026-10-07"]
+  },
+  {
+    "id": "missing_info",
+    "question": "What price should I charge next Saturday?",
+    "expected_tools": [],
+    "forbidden_tools": ["get_price_recommendation", "compare_price_scenarios"],
+    "expected_args": {},
+    "grounded_fields": []
+  }
+]
